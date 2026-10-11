@@ -5,10 +5,17 @@ FROM docker.io/library/node:20-alpine AS build_node_modules
 # Update npm to latest version
 RUN npm install -g npm@latest
 
-# Copy Web UI
-COPY src /app
+# Install dependencies first
 WORKDIR /app
-RUN npm ci --omit=dev &&\
+COPY src/package.json src/package-lock.json* ./
+RUN npm ci
+
+# Install the application and compile CSS stuff
+COPY src /app
+RUN npm run buildcss
+
+# Perform cleanup
+RUN npm prune --production && \
     mv node_modules /node_modules
 
 # Copy build result to a new image.

@@ -8,7 +8,7 @@
     "serve": "DEBUG=Server,WireGuard npx nodemon server.js",
     "serve-with-password": "PASSWORD=wg npm run serve",
     "lint": "eslint .",
-    "buildcss": "npx tailwindcss -i ./www/src/css/app.css -o ./www/css/app.css"
+    "buildcss": "npx @tailwindcss/cli -i ./www/src/css/app.css -o ./www/css/app.css"
   },
   "author": "Viktor Yudov",
   "license": "GPL",
@@ -19,9 +19,9 @@
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
     "eslint-config-athom": "^3.1.5",
-    "nodemon": "^3.1.10",
-    "tailwindcss": "^4.1.11"
+    "nodemon": "^3.1.10"
   },
   "nodemonConfig": {
     "ignore": [

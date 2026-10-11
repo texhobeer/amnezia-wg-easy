@@ -204,6 +204,7 @@ ${client.preSharedKey ? `PresharedKey = ${client.preSharedKey}\n` : ''
       latestHandshakeAt: null,
       transferRx: null,
       transferTx: null,
+      forwarding: client.forwarding || [],
     }));
 
     // Loop WireGuard status
@@ -382,6 +383,15 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
     const client = await this.getClient({ clientId });
 
     client.name = name;
+    client.updatedAt = new Date();
+
+    await this.saveConfig();
+  }
+
+  async updateClientForwarding({ clientId, forwarding }) {
+    const client = await this.getClient({ clientId });
+
+    client.forwarding = forwarding;
     client.updatedAt = new Date();
 
     await this.saveConfig();

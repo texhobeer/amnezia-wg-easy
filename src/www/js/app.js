@@ -65,6 +65,8 @@ new Vue({
     clientEditNameId: null,
     clientEditAddress: null,
     clientEditAddressId: null,
+    clientEditForwarding: null,
+    clientEditForwardingId: null,
     qrcode: null,
 
     currentRelease: null,
@@ -300,6 +302,14 @@ new Vue({
       this.api.updateClientAddress({ clientId: client.id, address })
         .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
+    },
+    updateClientForwarding(client, forwarding) {
+      this.api.updateClientForwarding({ clientId: client.id, forwarding })
+        .catch((err) => alert(err.message || err.toString()))
+        .finally(() => {
+          this.refresh().catch(console.error);
+          setTimeout(() => { this.clientEditForwarding = null; this.clientEditForwardingId = null; }, 200);
+        });
     },
     toggleTheme() {
       const themes = ['light', 'dark', 'auto'];

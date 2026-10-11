@@ -206,6 +206,15 @@ module.exports = class Server {
         const { address } = await readBody(event);
         await WireGuard.updateClientAddress({ clientId, address });
         return { success: true };
+      }))
+      .put('/api/wireguard/client/:clientId/forwarding', defineEventHandler(async (event) => {
+        const clientId = getRouterParam(event, 'clientId');
+        if (clientId === '__proto__' || clientId === 'constructor' || clientId === 'prototype') {
+          throw createError({ status: 403 });
+        }
+        const { forwarding } = await readBody(event);
+        await WireGuard.updateClientForwarding({ clientId, forwarding });
+        return { success: true };
       }));
 
     const safePathJoin = (base, target) => {

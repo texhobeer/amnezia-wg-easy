@@ -145,4 +145,12 @@ class API {
     });
   }
 
+  async updateClientForwarding({ clientId, forwarding }) {
+    return this.call({
+      method: 'put',
+      path: `/wireguard/client/${clientId}/forwarding`,
+      body: { forwarding },
+    });
+  }
+
 }

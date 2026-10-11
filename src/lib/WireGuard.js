@@ -205,6 +205,7 @@ ${client.preSharedKey ? `PresharedKey = ${client.preSharedKey}\n` : ''
       transferRx: null,
       transferTx: null,
       forwarding: client.forwarding || [],
+      endPoint: !!client.endPoint,
     }));
 
     // Loop WireGuard status
@@ -343,6 +344,7 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
       updatedAt: new Date(),
 
       enabled: true,
+      endPoint: false,
     };
 
     config.clients[id] = client;
@@ -405,6 +407,26 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
     }
 
     client.address = address;
+    client.updatedAt = new Date();
+
+    await this.saveConfig();
+  }
+
+  async updateClientEndPoint({ clientId, endPoint }) {
+    const config = await this.getConfig();
+
+    if (endPoint) {
+      for (const [id, client] of Object.entries(config.clients)) {
+        if (id !== clientId && client.endPoint) {
+          client.endPoint = false;
+          client.updatedAt = new Date();
+        }
+      }
+    }
+
+    const client = await this.getClient({ clientId });
+
+    client.endPoint = !!endPoint;
     client.updatedAt = new Date();
 
     await this.saveConfig();

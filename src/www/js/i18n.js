@@ -38,6 +38,9 @@ const messages = { // eslint-disable-line no-unused-vars
     forwardExists: 'Forward already exists',
     forwardRemoved: 'Forward removed',
     forwardingUpdated: 'Port forwarding updated',
+    endpoint: 'Toggle Endpoint',
+    endpointEnabled: 'Endpoint mode enabled',
+    endpointDisabled: 'Endpoint mode disabled',
   },
   ua: {
     name: 'Ім`я',
@@ -100,6 +103,9 @@ const messages = { // eslint-disable-line no-unused-vars
     forwardExists: 'Переадресация уже существует',
     forwardRemoved: 'Переадресация удалена',
     forwardingUpdated: 'Переадресация портов обновлена',
+    endpoint: 'Режим endpoint',
+    endpointEnabled: 'Режим endpoint включён',
+    endpointDisabled: 'Режим endpoint выключен',
   },
   tr: { // Müslüm Barış Korkmazer @babico
     name: 'İsim',

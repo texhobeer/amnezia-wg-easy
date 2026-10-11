@@ -153,4 +153,12 @@ class API {
     });
   }
 
+  async updateClientEndPoint({ clientId, endPoint }) {
+    return this.call({
+      method: 'put',
+      path: `/wireguard/client/${clientId}/endpoint`,
+      body: { endPoint },
+    });
+  }
+
 }

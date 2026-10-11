@@ -311,6 +311,15 @@ new Vue({
           setTimeout(() => { this.clientEditForwarding = null; this.clientEditForwardingId = null; }, 200);
         });
     },
+    toggleClientEndPoint(client) {
+      client.endPoint = !client.endPoint;
+      this.api.updateClientEndPoint({ clientId: client.id, endPoint: client.endPoint })
+        .catch((err) => {
+          alert(err.message || err.toString());
+          client.endPoint = !client.endPoint;
+        })
+        .finally(() => this.refresh().catch(console.error));
+    },
     toggleTheme() {
       const themes = ['light', 'dark', 'auto'];
       const currentIndex = themes.indexOf(this.uiTheme);

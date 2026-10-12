@@ -23,7 +23,6 @@ const {
   WG_POST_UP,
   WG_PRE_DOWN,
   WG_POST_DOWN,
-  WG_TABLE,
   JC,
   JMIN,
   JMAX,
@@ -110,12 +109,21 @@ module.exports = class WireGuard {
   async __saveConfig(config) {
     let postUpForwarding = "";
     let postDownForwarding = "";
+    let postUpTableSettings = "";
+    let postDownTableSettings = "";
     let foundPeerEndPoint = false;
     for (const [clientId, client] of Object.entries(config.clients)) {
       if (client.endPoint) {
         if (foundPeerEndPoint)
           throw new Error("More than one peer end point detected");
         foundPeerEndPoint = true;
+
+        // Prevent the server and end point itself to use end point for the internet access.
+        //
+        // wg-quick sets up its table that catches all the traffic to the internet, these rules are used as
+        // early bypass
+        postUpTableSettings = ` ip rule add from ${config.server.address} lookup main; ip rule add from ${client.address} lookup main;`;
+        postDownTableSettings = ` ip rule del from ${config.server.address} lookup main; ip rule del from ${client.address} lookup main;`;
       }
 
       if (!client.enabled || !client.forwarding) continue;
@@ -139,10 +147,9 @@ PrivateKey = ${config.server.privateKey}
 Address = ${config.server.address}/24
 ListenPort = ${WG_PORT}
 PreUp = ${WG_PRE_UP}
-PostUp = ${WG_POST_UP} ${postUpForwarding}
+PostUp = ${WG_POST_UP} ${postUpTableSettings} ${postUpForwarding}
 PreDown = ${WG_PRE_DOWN}
-PostDown = ${WG_POST_DOWN} ${postDownForwarding}
-${WG_TABLE ? `Table = ${WG_TABLE}\n` : ''}
+PostDown = ${WG_POST_DOWN} ${postDownTableSettings} ${postDownForwarding}
 Jc = ${config.server.jc}
 Jmin = ${config.server.jmin}
 Jmax = ${config.server.jmax}

@@ -135,7 +135,6 @@ These options can be configured by setting environment variables using `-e KEY="
 | `WG_POST_UP` | `...` | `iptables ...` | See [config.js](/src/config.js#L22) for the default value. |
 | `WG_PRE_DOWN` | `...` | - | See [config.js](/src/config.js#L29) for the default value. |
 | `WG_POST_DOWN` | `...` | `iptables ...` | See [config.js](/src/config.js#L30) for the default value. |
-| `WG_TABLE` | - | `1234` | Routing table to be used on the server for all the WG connections. |
 | `UI_TRAFFIC_STATS` | `false` | `true` | Enable detailed RX / TX client stats in Web UI |
 | `UI_CHART_TYPE` | `0` | `1` | UI_CHART_TYPE=0 # Charts disabled, UI_CHART_TYPE=1 # Line chart, UI_CHART_TYPE=2 # Area chart, UI_CHART_TYPE=3 # Bar chart |
 | `JC` | `random` | `5` | Junk packet count — number of packets with random data that are sent before the start of the session. |

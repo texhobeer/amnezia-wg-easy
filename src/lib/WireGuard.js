@@ -155,15 +155,23 @@ H4 = ${config.server.h4}
 Jc = ${config.server.jc}
 `;
 
+    let clientsConfigs = ""
     for (const [clientId, client] of Object.entries(config.clients)) {
       if (!client.enabled) continue;
 
       // Access everything via end point peer
       let peerAddr = `${client.address}/32`
-      if (client.endPoint)
+      if (client.endPoint) {
         peerAddr = `0.0.0.0/0`
+        result += `
+PostUp = ip rule add from ${client.address}/32 iif %i lookup main priority 500
+PostUp = ip rule add iif %i lookup ${WG_TABLE} priority 1000
+PostDown = ip rule del from ${client.address}/32 iif %i lookup main priority 500
+PostDown = ip rule del iif %i lookup ${WG_TABLE} priority 1000
+`;
+      }
 
-      result += `
+      clientsConfigs += `
 
 # Client: ${client.name} (${clientId})
 [Peer]
@@ -171,6 +179,8 @@ PublicKey = ${client.publicKey}
 ${client.preSharedKey ? `PresharedKey = ${client.preSharedKey}\n` : ''
 }AllowedIPs = ${peerAddr}`;
     }
+
+    result += clientsConfigs
 
     debug('Config saving...');
     await fs.writeFile(path.join(WG_PATH, 'wg0.json'), JSON.stringify(config, false, 2), {
